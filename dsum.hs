@@ -32,7 +32,7 @@ successProbability goal d = sum (map (encounterProbabilities d !!) goal)
 
 chancesFromSlot :: Int -> [Double]
 chancesFromSlot k = map (successProbability goalSlots . (negateDist encounterChance !+ encounterChance !+ uniformEncounterSlot k !+ encounterDsumDelta !+)) stepMixers
-    where stepMixers = map (\n -> frameDsumDelta !* (16 * n)) [0..]
+    where stepMixers = map (\n -> frameDsumDelta !* (framesPerStep * n)) [0..]
           encounterChance = uniformRange 0 (encounterRate - 1)
 
 main :: IO ()
