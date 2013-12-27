@@ -17,16 +17,16 @@ encounterProbabilities d = threshSums encounterThresholds (zip [0..] d)
     where threshSums _ [] = []
           threshSums (t:ts) v = sum (map snd (takeWhile (\(i, p) -> i < t) v)) : threshSums ts (dropWhile (\(i, p) -> i < t) v)
 
-framesPerStep = 16
-encounterRate = 25
+framesPerStep = 17
+encounterRate = 15
 
-encounterDsumDelta = gaussian (256 - 54.02) 8.5929
-frameDsumDelta = fromFunction (\x -> case x of 255 -> 0.072
-                                               0   -> 0.503
-                                               1   -> 0.425
+encounterDsumDelta = gaussian (256 - 25.39) 10.176
+frameDsumDelta = fromFunction (\x -> case x of 255 -> 0.086
+                                               0   -> 0.501
+                                               1   -> 0.413
                                                _   -> 0)
 
-goalSlots = [7]
+goalSlots = [3]
 successProbability :: [Int] -> ByteDist -> Double
 successProbability goal d = sum (map (encounterProbabilities d !!) goal)
 
@@ -42,11 +42,11 @@ main = do
 handleSlot :: Int -> IO ()
 handleSlot k = do
     print k
-    printStrategy . strategy . take 150 . chancesFromSlot $ k
+    printStrategy . strategy . take 250 . chancesFromSlot $ k
     putStrLn ""
 
 strategy :: [Double] -> [Bool]
-strategy = map (>= 0.15)
+strategy = map (>= 0.3)
 
 printStrategy :: [Bool] -> IO ()
 printStrategy = printStrategy' False where
